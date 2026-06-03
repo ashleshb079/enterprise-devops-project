@@ -29,11 +29,11 @@ stages {
         }
     }
 
-    stage('Run Container') {
+    stage('Deploy to kubernetes') {
         steps {
             sh '''
-            docker rm -f backend-container || true
-            docker run -d --name backend-container -p 3000:3000 $DOCKER_IMAGE
+            kubectl apply -f deployment.yaml
+            kubectl apply -f service.yaml
             '''
         }
     }
