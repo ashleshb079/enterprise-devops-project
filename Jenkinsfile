@@ -1,7 +1,7 @@
 pipeline {
 agent any
 
-```
+
 environment {
     DOCKER_IMAGE = "ashlesh36/backend-service:latest"
 }
@@ -38,6 +38,6 @@ stages {
         }
     }
 }
-```
+
 
 }
