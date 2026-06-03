@@ -32,8 +32,8 @@ stages {
     stage('Deploy to kubernetes') {
         steps {
             sh '''
-            kubectl apply -f deployment.yaml
-            kubectl apply -f service.yaml
+            kubectl apply -f deployment.yml
+            kubectl apply -f service.yml
             '''
         }
     }
