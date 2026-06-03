@@ -1,11 +1,31 @@
 pipeline {
 agent any
 
+```
+environment {
+    DOCKER_IMAGE = "ashlesh36/backend-service:latest"
+}
 
 stages {
+
     stage('Build Docker Image') {
         steps {
-            sh 'docker build -t backend-service app/backend'
+            sh 'docker build -t $DOCKER_IMAGE app/backend'
+        }
+    }
+
+    stage('Push to Docker Hub') {
+        steps {
+            withCredentials([usernamePassword(
+                credentialsId: 'dockerhub-creds',
+                usernameVariable: 'DOCKER_USER',
+                passwordVariable: 'DOCKER_PASS'
+            )]) {
+                sh '''
+                echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                docker push $DOCKER_IMAGE
+                '''
+            }
         }
     }
 
@@ -13,10 +33,11 @@ stages {
         steps {
             sh '''
             docker rm -f backend-container || true
-            docker run -d --name backend-container -p 3000:3000 backend-service
+            docker run -d --name backend-container -p 3000:3000 $DOCKER_IMAGE
             '''
         }
     }
 }
+```
 
 }
